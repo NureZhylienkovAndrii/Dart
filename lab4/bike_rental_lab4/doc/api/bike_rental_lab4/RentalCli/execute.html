@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the execute method from the RentalCli class, for the Dart programming language.">
+  <title>execute method - RentalCli class - bike_rental_lab4 library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">bike_rental_lab4</a></li>
+    <li><a href="../../bike_rental_lab4/">bike_rental_lab4.dart</a></li>
+    <li><a href="../../bike_rental_lab4/RentalCli-class.html">RentalCli</a></li>
+    <li class="self-crumb">execute method</li>
+  </ol>
+  <div class="self-name">execute</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="bike_rental_lab4&#47;RentalCli-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">execute</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../bike_rental_lab4/CliResult-class.html">CliResult</a></span>&gt;</span></span>
+<span class="name ">execute</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="execute-param-arguments"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">arguments</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;CliResult&gt; execute(List&lt;String&gt; arguments) async {
+  final parser = buildParser();
+
+  try {
+    final result = parser.parse(arguments);
+
+    if (result[&#39;help&#39;] == true || result.rest.isEmpty) {
+      stdout.writeln(&#39;СИСТЕМА ПРОКАТУ ВЕЛОСИПЕДІВ&#39;);
+      stdout.writeln(&#39;Команди: list, get, add, count-lines, fetch&#39;);
+      stdout.writeln(parser.usage);
+      return const CliResult(0);
+    }
+
+    final command = result.rest.first;
+
+    switch (command) {
+      case &#39;fetch&#39;:
+        final service = ExternalRentalService();
+
+        try {
+          final rentals = await service.fetchRentals();
+
+          stdout.writeln(&#39;Отримано записів із REST API: ${rentals.length}&#39;);
+
+          for (final rental in rentals) {
+            stdout.writeln(rental);
+          }
+        } finally {
+          service.close();
+        }
+
+      case &#39;list&#39;:
+        final station = result[&#39;station&#39;] as String?;
+        final rentals = await repository.findByStation(station);
+
+        stdout.writeln(&#39;Знайдено записів: ${rentals.length}&#39;);
+
+        for (final rental in rentals) {
+          stdout.writeln(rental);
+        }
+
+      case &#39;get&#39;:
+        final id = result[&#39;id&#39;] as String?;
+
+        if (id == null || id.isEmpty) {
+          throw const FormatException(&#39;Потрібно вказати --id&#39;);
+        }
+
+        final rental = await repository.findById(id);
+
+        if (rental == null) {
+          stderr.writeln(&#39;Оренду $id не знайдено&#39;);
+          return const CliResult(1);
+        }
+
+        stdout.writeln(rental);
+
+      case &#39;add&#39;:
+        final id = result[&#39;id&#39;] as String?;
+        final station = result[&#39;station&#39;] as String?;
+
+        if (id == null || station == null) {
+          throw const FormatException(&#39;Для add потрібні --id і --station&#39;);
+        }
+
+        final duration = int.parse(result[&#39;duration&#39;] as String);
+        final price = double.parse(result[&#39;price&#39;] as String);
+
+        final rental = BikeRental(
+          id: id,
+          station: station,
+          bikeType: result[&#39;type&#39;] as String,
+          duration: duration,
+          price: price,
+          date: DateTime.now(),
+        );
+
+        if (duration &lt;= 0 || !price.isFinite || price &lt; 0) {
+          throw const FormatException(&#39;Некоректна тривалість або вартість&#39;);
+        }
+
+        await repository.add(rental);
+        stdout.writeln(&#39;Оренду $id успішно додано&#39;);
+
+      case &#39;count-lines&#39;:
+        final path = result[&#39;file&#39;] as String?;
+
+        if (path == null) {
+          throw const FormatException(&#39;Потрібно вказати --file&#39;);
+        }
+
+        final count = await repository.countLines(path);
+        stdout.writeln(&#39;Непорожніх рядків: $count&#39;);
+
+      default:
+        throw FormatException(&#39;Невідома команда: $command&#39;);
+    }
+
+    return const CliResult(0);
+  } on ArgParserException catch (error) {
+    stderr.writeln(&#39;Помилка аргументів: $error&#39;);
+    return const CliResult(2);
+  } on FormatException catch (error) {
+    stderr.writeln(&#39;Помилка формату: $error&#39;);
+    return const CliResult(2);
+  } on FileSystemException catch (error) {
+    stderr.writeln(&#39;Помилка файлової системи: $error&#39;);
+    return const CliResult(3);
+  } on StateError catch (error) {
+    stderr.writeln(&#39;Помилка стану: $error&#39;);
+    return const CliResult(4);
+  } on SocketException catch (error) {
+    stderr.writeln(&#39;Помилка мережевого з’єднання: $error&#39;);
+    return const CliResult(5);
+  } on http.ClientException catch (error) {
+    stderr.writeln(&#39;Помилка HTTP-клієнта: $error&#39;);
+    return const CliResult(5);
+  } on HttpStatusException catch (error) {
+    stderr.writeln(error);
+    return const CliResult(6);
+  } on TimeoutException catch (error) {
+    stderr.writeln(&#39;Перевищено час очікування: $error&#39;);
+    return const CliResult(5);
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">bike_rental_lab4</a></li>
+    <li><a href="../../bike_rental_lab4/">bike_rental_lab4</a></li>
+    <li><a href="../../bike_rental_lab4/RentalCli-class.html">RentalCli</a></li>
+    <li class="self-crumb">execute method</li>
+</ol>
+
+    <h5>RentalCli class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    bike_rental_lab4
+      1.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
