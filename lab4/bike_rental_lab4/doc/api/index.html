@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="bike_rental_lab4 API docs, for the Dart programming language.">
+  <title>bike_rental_lab4 - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">bike_rental_lab4 package</li>
+  </ol>
+  <div class="self-name">bike_rental_lab4</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <p>Bike Rental Lab 4</p>
+<p>Модульний застосунок для обліку прокату велосипедів, реалізований мовою Dart.</p>
+<p>Можливості</p>
+<ul>
+<li>Додавання, пошук і перегляд оренд через CLI.</li>
+<li>Фільтрація оренд за станцією прокату.</li>
+<li>Збереження та завантаження записів у JSON.</li>
+<li>Потокове читання текстових файлів.</li>
+<li>Отримання демонстраційних даних із зовнішнього REST API.</li>
+<li>HTTP-сервер на основі shelf і shelf_router.</li>
+<li>Обробка помилок і журналювання HTTP-запитів.</li>
+<li>Автоматизоване тестування.</li>
+</ul>
+<p>Використані технології</p>
+<p>Dart SDK 3.13.4, пакети args, path, http, shelf, shelf_router, test`.</p>
+<p>Встановлення</p>
+<p>dart pub get</p>
+<p>Командний інтерфейс</p>
+<p>Перегляд довідки:</p>
+<p>dart run bin/bike_rental_lab4.dart --help</p>
+<p>Перегляд усіх оренд:</p>
+<p>dart run bin/bike_rental_lab4.dart list</p>
+<p>Фільтрація за станцією:</p>
+<p>dart run bin/bike_rental_lab4.dart list --station Центр</p>
+<p>Додавання оренди:</p>
+<p>dart run bin/bike_rental_lab4.dart add --id RENT-005 --station Парк --type city --duration 60 --price 120</p>
+<p>Пошук за ID:</p>
+<p>dart run bin/bike_rental_lab4.dart get --id RENT-001</p>
+<p>Отримання зовнішніх даних:</p>
+<p>dart run bin/bike_rental_lab4.dart fetch</p>
+<p>HTTP-сервер</p>
+<p>Запуск:</p>
+<p>dart run bin/server.dart</p>
+<p>Адреса сервера: <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a>.</p>
+<p>Маршрути:</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Шлях</th>
+<th>Призначення</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>/items</td>
+<td>Отримати всі оренди</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/items?station=Центр</td>
+<td>Фільтрація за станцією</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/items/RENT-001</td>
+<td>Отримати оренду за ID</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>/items</td>
+<td>Створити нову оренду</td>
+</tr>
+</tbody>
+</table>
+<p>HTTP-сервіс повертає JSON із кодуванням UTF-8. Підтримуються статуси 200, 201, 400, 404 і 409.</p>
+<p>Перевірка</p>
+<p>dart format .
+dart analyze
+dart test --reporter expanded
+dart fix --dry-run</p>
+<p>Компіляція</p>
+<p>dart compile exe bin/bike_rental_lab4.dart -o build\bike_rental_lab4.exe</p>
+<p>Структура проєкту</p>
+<ul>
+<li>bin/ — точки входу CLI та HTTP-сервера.</li>
+<li>lib/src/models/ — моделі предметної області.</li>
+<li>lib/src/repositories/ — файлове сховище.</li>
+<li>lib/src/services/ — зовнішній HTTP-клієнт.</li>
+<li>lib/src/cli/ — командний інтерфейс.</li>
+<li>lib/src/server/ — маршрути HTTP-сервера.</li>
+<li>test/ — автоматизовані тести.</li>
+<li>data/ — локальні JSON-дані.</li>
+</ul>
+<p>Особливості</p>
+<p>Зовнішній сервіс JSONPlaceholder використовується для навчальної демонстрації HTTP-запитів. Отримані користувачі перетворюються на умовні записи оренди; ці записи не є реальними операціями прокату.</p>
+<p>Файлове сховище призначене для локальної демонстрації та не забезпечує транзакційного захисту від одночасного запису кількома процесами.</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="bike_rental_lab2">
+  <span class="name"><a href="bike_rental_lab2/">bike_rental_lab2</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="bike_rental_lab3">
+  <span class="name"><a href="bike_rental_lab3/">bike_rental_lab3</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="bike_rental_lab4">
+  <span class="name"><a href="bike_rental_lab4/">bike_rental_lab4</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">bike_rental_lab4 package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">bike_rental_lab4</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="bike_rental_lab2/">bike_rental_lab2</a></li>
+      <li><a href="bike_rental_lab3/">bike_rental_lab3</a></li>
+      <li><a href="bike_rental_lab4/">bike_rental_lab4</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    bike_rental_lab4
+      1.0.0
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
