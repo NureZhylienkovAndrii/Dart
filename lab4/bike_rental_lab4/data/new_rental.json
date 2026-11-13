@@ -1,0 +1,8 @@
+{
+  "id": "RENT-004",
+  "station": "Парк",
+  "bikeType": "electric",
+  "duration": 75,
+  "price": 180.0,
+  "date": "2026-11-13T13:00:00"
+}
